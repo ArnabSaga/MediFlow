@@ -1,0 +1,37 @@
+{
+  "name": "healthcare",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node dist/server.js",
+    "build": "tsc",
+    "dev": "tsx watch src/server.ts",
+    "lint": "eslint ./src/**/*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ArnabSaga/Ph-HealthCare.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/ArnabSaga/Ph-HealthCare/issues"
+  },
+  "homepage": "https://github.com/ArnabSaga/Ph-HealthCare#readme",
+  "dependencies": {
+    "dotenv": "^17.2.4",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.2.1",
+    "eslint": "^9.39.2",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.54.0"
+  }
+}
