@@ -61,7 +61,7 @@ const deleteDoctor = async (id: string) => {
   });
 
   if (doctor.count === 0) {
-    throw new Error("Doctor not found or already deleted");
+    throw new AppError(status.BAD_REQUEST, "Doctor not found or already deleted");
   }
 
   return doctor;
