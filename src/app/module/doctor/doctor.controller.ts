@@ -18,40 +18,49 @@ const getAllDoctors = catchAsync(async (req: Request, res: Response) => {
 });
 
 // TODO: Implement this
-/*
+
 const getDoctorById = catchAsync(async (req: Request, res: Response) => {
-  const result = await DoctorService.getDoctorById(req.params.id as string);
+  const { id } = req.params;
+
+  const doctor = await DoctorService.getDoctorById(id as string);
 
   sendResponse(res, {
     httpStatusCode: status.OK,
     success: true,
-    message: "Doctor retrieved successfully",
-    data: result,
+    message: "Doctor fetched successfully",
+    data: doctor,
   });
 });
 
 const updateDoctor = catchAsync(async (req: Request, res: Response) => {
-    const result = await DoctorService.updateDoctor(req.params.id as string, req.body);
+  const { id } = req.params;
+  const payload = req.body;
 
-    sendResponse(res, {
-        httpStatusCode: status.OK,
-        success: true,
-        message: "Doctor updated successfully",
-        data: result,
-    });
+  const updatedDoctor = await DoctorService.updateDoctor(id as string, payload);
+
+  sendResponse(res, {
+    httpStatusCode: status.OK,
+    success: true,
+    message: "Doctor updated successfully",
+    data: updatedDoctor,
+  });
 });
 
 const deleteDoctor = catchAsync(async (req: Request, res: Response) => {
-    const result = await DoctorService.deleteDoctor(req.params.id as string);
+  const { id } = req.params;
 
-    sendResponse(res, {
-        httpStatusCode: status.OK,
-        success: true,
-        message: "Doctor deleted successfully",
-        data: result,
-    });
+  const result = await DoctorService.deleteDoctor(id as string);
+
+  sendResponse(res, {
+    httpStatusCode: status.OK,
+    success: true,
+    message: "Doctor deleted successfully",
+    data: result,
+  });
 });
-*/
 export const DoctorController = {
   getAllDoctors,
+  getDoctorById,
+  updateDoctor,
+  deleteDoctor,
 };
