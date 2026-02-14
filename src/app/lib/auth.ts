@@ -4,6 +4,7 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 
 import { Role, UserStatus } from "../../generated/prisma/enums";
 
+import { bearer } from "better-auth/plugins";
 import { prisma } from "./prisma";
 
 export const auth = betterAuth({
@@ -48,6 +49,8 @@ export const auth = betterAuth({
       },
     },
   },
+
+  plugins: [bearer()],
 
   session: {
     expiresIn: 60 * 60 * 60 * 24, // 1 Day
