@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
 import status from "http-status";
+import AppError from "../../errorHelpers/AppError";
+import { IRequestUser } from "../../interfaces/request.interface";
 import { catchAsync } from "../../shared/catchAsync";
 import { sendResponse } from "../../shared/sendResponse";
 import { tokenUtils } from "../../utils/token";
 import { AuthService } from "./auth.service";
-import { IRequestUser } from '../../interfaces/request.interface';
 
 const registerPatient = catchAsync(async (req: Request, res: Response) => {
   const payload = req.body;
@@ -67,8 +68,38 @@ const getMe = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getNewToken = catchAsync(async (req: Request, res: Response) => {
+  const refreshToken = req.cookies.refreshToken;
+  const betterAuthSessionToken = req.cookies.betterAuthSessionToken;
+
+  if (!refreshToken || !betterAuthSessionToken) {
+    throw new AppError(status.UNAUTHORIZED, "Refresh token not found");
+  }
+
+  const result = await AuthService.getNewToken(refreshToken, betterAuthSessionToken);
+
+  const { accessToken, refreshToken: newRefreshToken, sessionToken } = result;
+
+  tokenUtils.setAccessTokenCookie(res, accessToken);
+  tokenUtils.setRefreshTokenCookie(res, newRefreshToken);
+  tokenUtils.setBetterAuthSessionCookie(res, sessionToken);
+
+  sendResponse(res, {
+    httpStatusCode: status.OK,
+    success: true,
+    message: "New token generated successfully",
+    data: {
+      accessToken,
+      refreshToken,
+      sessionToken,
+      newRefreshToken,
+    },
+  });
+});
+
 export const AuthController = {
   registerPatient,
   loginUser,
   getMe,
+  getNewToken,
 };
