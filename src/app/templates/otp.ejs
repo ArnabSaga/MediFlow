@@ -4,38 +4,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verify Email</title>
+    <title>Verification Code</title>
     <style>
         body {
             background-color: #F3F4F6;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             margin: 0;
             padding: 0;
+            -webkit-font-smoothing: antialiased;
+            color: #1F2937;
         }
 
         .wrapper {
             width: 100%;
-            table-layout: fixed;
             padding: 40px 0;
             background-color: #F3F4F6;
         }
 
         .card {
-            max-width: 460px;
+            max-width: 480px;
             margin: 0 auto;
             background-color: #ffffff;
-            border-radius: 20px;
-            padding: 40px;
-            text-align: center;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-            border: 1px solid #f1f1f1;
+            border-radius: 16px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
         }
 
-        h2 {
-            color: #1F2937;
-            font-size: 26px;
-            font-weight: 700;
-            margin: 0 0 12px 0;
+        .icon-header {
+            text-align: center;
+            padding-top: 40px;
+            padding-bottom: 24px;
+        }
+
+        .icon-circle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 64px;
+            height: 64px;
+            background-color: #EFF6FF;
+            border-radius: 50%;
+        }
+
+        .shield-icon {
+            font-size: 32px;
+            line-height: 1;
+        }
+
+        .content-body {
+            padding: 0 40px 32px 40px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 800;
+            color: #111827;
+            margin: 0 0 16px 0;
             letter-spacing: -0.5px;
         }
 
@@ -43,81 +69,77 @@
             color: #6B7280;
             font-size: 15px;
             line-height: 1.6;
-            margin: 0 0 24px 0;
+            margin: 0 0 32px 0;
         }
 
-        /* --- OTP Code Box --- */
         .otp-wrapper {
-            background: #F9FAFB;
-            border: 2px dashed #E5E7EB;
-            border-radius: 16px;
-            padding: 24px;
-            margin: 0 auto 30px auto;
-            /* More space below */
+            background-color: #F9FAFB;
+            border: 1px solid #E5E7EB;
+            border-radius: 12px;
+            padding: 32px 0;
+            margin-bottom: 32px;
         }
 
         .otp-code {
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 36px;
-            font-weight: 700;
-            color: #111827;
-            letter-spacing: 12px;
-            margin-left: 12px;
-            display: block;
-        }
-
-        /* --- STACKED TIMER STYLES --- */
-        .timer-stack {
-            display: block;
-            width: 100%;
-            max-width: 300px;
-            /* Constrain width for better look */
-            margin: 0 auto 32px auto;
-            text-align: center;
-        }
-
-        /* The pulsing text */
-        .timer-text {
             display: inline-block;
-            font-size: 13px;
+            /* background-color: #2563EB; */
+            color: #000;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 32px;
             font-weight: 700;
-            color: #EF4444;
+            letter-spacing: 8px;
+            padding: 12px 24px;
+            border-radius: 8px;
+            padding-right: 16px;
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+        }
+
+        .timer-container {
+            margin-bottom: 8px;
+            text-align: center;
+            max-width: 280px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .timer-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #DC2626;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 8px;
-            /* Spacing between text and bar */
-            animation: pulse 1s infinite alternate;
-            /* Makes it breathe */
+            margin-bottom: 10px;
+            display: block;
         }
 
-        /* Icon styling */
-        .timer-icon {
-            font-style: normal;
-            margin-right: 4px;
-        }
-
-        /* The bar track */
         .progress-track {
             width: 100%;
-            height: 8px;
-            background-color: #F3F4F6;
-            border-radius: 100px;
+            height: 6px;
+            background-color: #EFF6FF;
+            border-radius: 10px;
             overflow: hidden;
-            position: relative;
         }
 
-        /* The moving bar */
         .progress-bar {
             height: 100%;
             width: 100%;
-            background: linear-gradient(90deg, #6366F1, #EF4444);
-            /* Indigo to Red */
-            border-radius: 100px;
+            background-color: #2563EB;
+            border-radius: 10px;
             transform-origin: left;
+            -webkit-animation: countdown 120s linear forwards;
             animation: countdown 120s linear forwards;
         }
 
-        /* Animations */
+        @-webkit-keyframes countdown {
+            0% {
+                width: 100%;
+            }
+
+            100% {
+                width: 0%;
+            }
+        }
+
         @keyframes countdown {
             0% {
                 width: 100%;
@@ -128,40 +150,26 @@
             }
         }
 
-        @keyframes pulse {
-            0% {
-                opacity: 1;
-                transform: scale(1);
-            }
-
-            100% {
-                opacity: 0.7;
-                transform: scale(0.98);
-            }
+        .footer-warning {
+            background-color: #F9FAFB;
+            border-top: 1px solid #E5E7EB;
+            padding: 24px 40px;
+            text-align: center;
         }
 
-        /* Footer */
-        .divider {
-            height: 1px;
-            background-color: #F3F4F6;
-            margin: 32px 0;
+        .warning-text {
+            font-size: 13px;
+            color: #6B7280;
+            line-height: 1.5;
+            margin: 0;
         }
 
-        .footer-text {
+        .copyright-text {
+            text-align: center;
+            margin-top: 32px;
             font-size: 12px;
             color: #9CA3AF;
             line-height: 1.5;
-        }
-
-        .secure-badge {
-            display: inline-block;
-            background: #ECFDF5;
-            color: #059669;
-            font-size: 11px;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-weight: 600;
-            margin-top: 10px;
         }
     </style>
 </head>
@@ -170,37 +178,43 @@
     <div class="wrapper">
         <div class="card">
 
-            <h2>Verify your identity</h2>
-            <p>Hi <%= name %>, please enter the following verification code to access your account.</p>
-
-            <div class="otp-wrapper">
-                <span class="otp-code">
-                    <%= otp %>
-                </span>
-            </div>
-
-            <div class="timer-stack">
-                <div class="timer-text">
-                    <span class="timer-icon">⏰</span> Expires in 2 minutes
-                </div>
-                <div class="progress-track">
-                    <div class="progress-bar"></div>
+            <div class="icon-header">
+                <div class="icon-circle">
+                    <span class="shield-icon">🛡️</span>
                 </div>
             </div>
 
-            <p class="footer-text">
-                <span class="secure-badge">Secure Verification</span>
-                <br><br>
-                If you did not request this code, please ignore this email.
-            </p>
+            <div class="content-body">
+                <h1>Verification Code</h1>
+                <p>Hello <%= name %>, please use the following One Time Password (OTP) to verify your identity.</p>
 
-            <div class="divider"></div>
+                <div class="otp-wrapper">
+                    <span class="otp-code">
+                        <%= otp %>
+                    </span>
+                </div>
 
-            <p class="footer-text">
-                &copy; <%= new Date().getFullYear() %> Medi-Flow Inc.<br>
-                    Khulna, Bangladesh.
-            </p>
+                <div class="timer-container">
+                    <span class="timer-label">Expires in 2 minutes</span>
+                    <div class="progress-track">
+                        <div class="progress-bar"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-warning">
+                <p class="warning-text">
+                    <strong>Don't share this code.</strong><br>
+                    If you didn't request this code, you can safely ignore this email. Someone else might have typed
+                    your email address by mistake.
+                </p>
+            </div>
         </div>
+
+        <p class="copyright-text">
+            &copy; <%= new Date().getFullYear() %> Medi-Flow Inc.<br>
+                Khulna, Bangladesh.
+        </p>
     </div>
 </body>
 
