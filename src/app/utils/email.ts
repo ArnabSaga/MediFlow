@@ -6,21 +6,9 @@ import path from "path";
 import { envVars } from "../config/env";
 import AppError from "../errorHelpers/AppError";
 
-interface SendEmailOptions {
-  to: string;
-  subject: string;
-  templateName: string;
-  templateData: Record<string, string>;
-  attachments?: {
-    filename: string;
-    content: Buffer | string;
-    contentType: string;
-  }[];
-}
-
 const transporter = nodemailer.createTransport({
   host: envVars.EMAIL_SENDER.SMTP_HOST,
-  secure: false,
+  secure: true,
   auth: {
     user: envVars.EMAIL_SENDER.SMTP_USER,
     pass: envVars.EMAIL_SENDER.SMTP_PASS,
@@ -28,11 +16,23 @@ const transporter = nodemailer.createTransport({
   port: Number(envVars.EMAIL_SENDER.SMTP_PORT),
 });
 
+interface SendEmailOptions {
+  to: string;
+  subject: string;
+  templateName: string;
+  templateData: Record<string, any>;
+  attachments?: {
+    filename: string;
+    content: Buffer | string;
+    contentType: string;
+  }[];
+}
+
 export const sendEmail = async ({
   subject,
   templateData,
-  to,
   templateName,
+  to,
   attachments,
 }: SendEmailOptions) => {
   try {
@@ -52,9 +52,9 @@ export const sendEmail = async ({
       })),
     });
 
-    console.log(`Email Sent to ${to}: ${info.messageId}`);
+    console.log(`Email sent to ${to} : ${info.messageId}`);
   } catch (error: any) {
-    console.log("Email Sending Error", error);
+    console.log("Email Sending Error", error.message);
     throw new AppError(status.INTERNAL_SERVER_ERROR, "Failed to send email");
   }
 };
