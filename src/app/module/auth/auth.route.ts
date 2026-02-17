@@ -5,8 +5,9 @@ import { AuthController } from "./auth.controller";
 
 const router = Router();
 
-router.post("/register", AuthController.registerPatient);
-router.post("/login", AuthController.loginUser);
+router.get("/login/google", AuthController.googleLogin);
+router.get("/google/success", AuthController.googleLoginSuccess);
+router.get("/oauth/error", AuthController.handleOAuthError);
 router.get(
   "/me",
   checkAuth(Role.PATIENT, Role.DOCTOR, Role.ADMIN, Role.SUPER_ADMIN),
@@ -23,6 +24,8 @@ router.post(
   checkAuth(Role.PATIENT, Role.DOCTOR, Role.ADMIN, Role.SUPER_ADMIN),
   AuthController.logoutUser
 );
+router.post("/register", AuthController.registerPatient);
+router.post("/login", AuthController.loginUser);
 router.post("/verify-email", AuthController.verifyEmail);
 router.post("/forget-password", AuthController.forgetPassword);
 router.post("/reset-password", AuthController.resetPassword);
