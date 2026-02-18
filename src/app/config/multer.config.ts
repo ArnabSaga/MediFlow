@@ -20,7 +20,7 @@ const storage = new CloudinaryStorage({
     const uniqueName =
       Math.random().toString(36).substring(2) + "-" + Date.now() + "-" + fileNameWithoutExtension;
 
-    const folder = extension === "pdf" ? "pdf" : "images";
+    const folder = extension === "pdf" ? "pdfs" : "images";
 
     return {
       folder: `MediFlow/${folder}`,
