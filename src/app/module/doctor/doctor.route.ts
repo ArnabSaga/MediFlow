@@ -7,7 +7,11 @@ import { updateDoctorZodSchema } from "./doctor.validation";
 
 const router = Router();
 
-router.get("/", checkAuth(Role.ADMIN, Role.SUPER_ADMIN), DoctorController.getAllDoctors);
+router.get(
+  "/",
+  // checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
+  DoctorController.getAllDoctors
+);
 router.get("/:id", checkAuth(Role.ADMIN, Role.SUPER_ADMIN), DoctorController.getDoctorById);
 router.patch(
   "/:id",
