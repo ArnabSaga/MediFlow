@@ -7,7 +7,7 @@ export const doctorSearchableFields = [
   "designation",
   "currentWorkingPlace",
   "registrationNumber",
-  "specialties.speciality.title",
+  "specialties.specialty.title",
 ];
 export const doctorFilterableFields = [
   "gender",
@@ -19,7 +19,7 @@ export const doctorFilterableFields = [
   "currentWorkingPlace",
   "designation",
   "qualification",
-  "specialties.speciality.title",
+  "specialties.specialty.title",
   "user.role",
   "user.email",
 ];

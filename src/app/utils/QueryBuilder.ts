@@ -23,12 +23,12 @@ export class QueryBuilder<
   private skip: number = 0;
   private sortBy: string = "createdAt";
   private sortOrder: "asc" | "desc" = "desc";
-  private selectFields: Record<string, boolean | undefined> = {};
+  private selectFields: Record<string, boolean> | undefined;
 
   constructor(
     private model: PrismaModelDelegate,
     private queryParams: IQueryParams,
-    private config: IQueryConfig
+    private config: IQueryConfig = {}
   ) {
     this.query = {
       where: {},
@@ -46,7 +46,7 @@ export class QueryBuilder<
     const { searchTerm } = this.queryParams;
     const { searchableFields } = this.config;
 
-    //Note - doctorSearchableFields = ["user.name", "user.email", "specialties.speciality.title"]
+    //Note - doctorSearchableFields = ["user.name", "user.email", "specialties.specialty.title"]
     if (searchTerm && searchableFields && searchableFields.length > 0) {
       const searchConditions: Record<string, unknown>[] = searchableFields.map((field) => {
         if (field.includes(".")) {
@@ -75,8 +75,10 @@ export class QueryBuilder<
 
             return {
               [relation]: {
-                [nestedRelation]: {
-                  [nestedField]: stringFilter,
+                some: {
+                  [nestedRelation]: {
+                    [nestedField]: stringFilter,
+                  },
                 },
               },
             };
@@ -114,7 +116,7 @@ export class QueryBuilder<
       "sortBy",
       "sortOrder",
       "fields",
-      "includes",
+      "include",
     ];
 
     const filterParams: Record<string, unknown> = {};
@@ -138,10 +140,6 @@ export class QueryBuilder<
       const isAllowedField =
         !filterableFields || filterableFields.length === 0 || filterableFields.includes(key);
 
-      if (!isAllowedField) {
-        return;
-      }
-
       //Note - /doctors?user.name = Rz => { user: { name: "Rz" } }
       if (key.includes(".")) {
         const parts = key.split(".");
@@ -158,39 +156,17 @@ export class QueryBuilder<
             countQueryWhere[relation] = {};
           }
 
-          queryWhere[relation] = {
-            [nestedField]: this.paresFilterValue(value),
-          };
+          const queryRelation = queryWhere[relation] as Record<string, unknown>;
+          const countRelation = countQueryWhere[relation] as Record<string, unknown>;
 
-          countQueryWhere[relation] = {
-            [nestedField]: this.paresFilterValue(value),
-          };
+          queryRelation[nestedField] = this.paresFilterValue(value);
+          countRelation[nestedField] = this.paresFilterValue(value);
 
-          return;
-        } else if (parts.length === 3) {
-          const [relation, nestedRelation, nestedField] = parts;
-
-          if (!queryWhere[relation]) {
-            queryWhere[relation] = {};
-            countQueryWhere[relation] = {};
-          }
-
-          queryWhere[relation] = {
-            [nestedRelation]: {
-              [nestedField]: this.paresFilterValue(value),
-            },
-          };
-
-          countQueryWhere[relation] = {
-            [nestedRelation]: {
-              [nestedField]: this.paresFilterValue(value),
-            },
-          };
           return;
         }
-      } else {
-        queryWhere[key] = this.paresFilterValue(value);
-        countQueryWhere[key] = this.paresFilterValue(value);
+      }
+
+      if (!isAllowedField) {
         return;
       }
 
@@ -252,6 +228,10 @@ export class QueryBuilder<
             },
           },
         };
+      } else {
+        this.query.orderBy = {
+          [sortBy]: sortOrder,
+        };
       }
     } else {
       this.query.orderBy = {
@@ -312,7 +292,7 @@ export class QueryBuilder<
       }
     });
 
-    const includeParam = this.queryParams.includes as string | undefined;
+    const includeParam = this.queryParams.include as string | undefined;
 
     if (includeParam && typeof includeParam === "string") {
       const requestedRelations = includeParam.split(",").map((relation) => relation.trim());
@@ -386,6 +366,8 @@ export class QueryBuilder<
         } else {
           result[key] = source[key];
         }
+      } else {
+        result[key] = source[key];
       }
     }
 
