@@ -37,8 +37,8 @@ const createSchedule = async (payload: ICreateSchedulePayload) => {
     );
 
     while (startDateTime < endDateTime) {
-      const start = await convertDateTime(startDateTime);
-      const end = await convertDateTime(addMinutes(startDateTime, interval));
+      const start = convertDateTime(startDateTime);
+      const end = convertDateTime(addMinutes(startDateTime, interval));
 
       const scheduleData = {
         startDateTime: start,
@@ -121,8 +121,8 @@ const updateSchedule = async (id: string, payload: IUpdateSchedulePayload) => {
       id: id,
     },
     data: {
-      startDateTime: startDateTime,
-      endDateTime: endDateTime,
+      startDateTime: convertDateTime(startDateTime),
+      endDateTime: convertDateTime(endDateTime),
     },
   });
 
