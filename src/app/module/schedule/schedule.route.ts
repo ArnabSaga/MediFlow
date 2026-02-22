@@ -31,4 +31,4 @@ router.patch(
 );
 router.delete("/:id", checkAuth(Role.ADMIN, Role.SUPER_ADMIN), ScheduleController.deleteSchedule);
 
-export const scheduleRoutes = router;
+export const ScheduleRoutes = router;

@@ -1,7 +1,7 @@
 import status from "http-status";
 import { UserStatus } from "../../../generated/prisma/enums";
 import AppError from "../../errorHelpers/AppError";
-import { IRequestUser } from "../../interfaces/request.interface";
+import { IRequestUser } from "../../interfaces/requestUser.interface";
 import { prisma } from "../../lib/prisma";
 import { IUpdateAdminPayload } from "./admin.interface";
 

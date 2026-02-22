@@ -265,7 +265,7 @@ export class QueryBuilder<
     return this;
   }
 
-  includes(relation: TInclude): this {
+  include(relation: TInclude): this {
     if (this.selectFields) {
       return this;
     }
@@ -279,7 +279,7 @@ export class QueryBuilder<
     return this;
   }
 
-  dynamicIncludes(includeConfig: Record<string, unknown>, defaultInclude?: string[]): this {
+  dynamicInclude(includeConfig: Record<string, unknown>, defaultInclude?: string[]): this {
     if (this.selectFields) {
       return this;
     }

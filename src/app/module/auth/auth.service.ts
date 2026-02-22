@@ -7,7 +7,7 @@ import AppError from "../../errorHelpers/AppError";
 
 import { JwtPayload } from "jsonwebtoken";
 import { envVars } from "../../config/env";
-import { IRequestUser } from "../../interfaces/request.interface";
+import { IRequestUser } from "../../interfaces/requestUser.interface";
 import { auth } from "../../lib/auth";
 import { prisma } from "../../lib/prisma";
 import { jwtUtils } from "../../utils/jwt";

@@ -1,4 +1,4 @@
-import { IRequestUser } from "./request.interface";
+import { IRequestUser } from "./requestUser.interface";
 
 declare global {
   namespace Express {

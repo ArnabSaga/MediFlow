@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import status from "http-status";
 import { envVars } from "../../config/env";
 import AppError from "../../errorHelpers/AppError";
-import { IRequestUser } from "../../interfaces/request.interface";
+import { IRequestUser } from "../../interfaces/requestUser.interface";
 import { auth } from "../../lib/auth";
 import { catchAsync } from "../../shared/catchAsync";
 import { sendResponse } from "../../shared/sendResponse";
