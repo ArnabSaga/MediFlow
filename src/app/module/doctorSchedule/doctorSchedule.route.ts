@@ -1,5 +1,4 @@
 import { Router } from "express";
-
 import { Role } from "../../../generated/prisma/enums";
 import { checkAuth } from "../../middleware/checkAuth";
 import { DoctorScheduleController } from "./doctorSchedule.controller";
@@ -31,7 +30,7 @@ router.get(
 );
 
 router.patch(
-  "/update-my-doctor-schedule/:id",
+  "/update-my-doctor-schedule",
   checkAuth(Role.DOCTOR),
   DoctorScheduleController.updateMyDoctorSchedule
 );

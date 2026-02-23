@@ -5,6 +5,6 @@ export interface ICreateDoctorSchedulePayload {
 export interface IUpdateDoctorSchedulePayload {
   scheduleIds: {
     shouldDelete: boolean;
-    id: string;
+    scheduleId: string;
   }[];
 }
