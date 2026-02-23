@@ -39,6 +39,10 @@ const bookAppointment = async (payload: IBookAppointmentPayload, user: IRequestU
     },
   });
 
+  if (doctorSchedule.isBooked) {
+    throw new AppError(status.BAD_REQUEST, "This schedule is already booked");
+  }
+
   const videoCallingId = String(uuidv7());
 
   const result = await prisma.$transaction(async (tx) => {
@@ -83,7 +87,7 @@ const bookAppointment = async (payload: IBookAppointmentPayload, user: IRequestU
             product_data: {
               name: `Appointment with Dr. ${doctorData.name}`,
             },
-            unit_amount: doctorData.appointmentFee * 120,
+            unit_amount: doctorData.appointmentFee * 100,
           },
           quantity: 1,
         },
@@ -292,6 +296,10 @@ const bookAppointmentWithPayLater = async (
       },
     },
   });
+
+  if (doctorSchedule.isBooked) {
+    throw new AppError(status.BAD_REQUEST, "This schedule is already booked");
+  }
 
   const videoCallingId = String(uuidv7());
 
