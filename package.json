@@ -12,6 +12,8 @@
     "studio": "prisma studio",
     "push": "prisma db push",
     "pull": "prisma db pull",
+    "stripe:webhook": "stripe listen --forward-to localhost:5000/webhook",
+    "stripe:trigger-testing": "stripe trigger payment_intent.succeeded",
     "lint": "eslint ./src/**/*"
   },
   "repository": {
@@ -37,9 +39,12 @@
     "jsonwebtoken": "^9.0.3",
     "multer": "^2.0.2",
     "multer-storage-cloudinary": "^4.0.0",
+    "node-cron": "^4.2.1",
     "nodemailer": "^8.0.1",
     "pg": "^8.18.0",
     "qs": "^6.15.0",
+    "stripe": "^20.3.1",
+    "uuid": "^13.0.0",
     "zod": "^4.3.6"
   },
   "devDependencies": {
