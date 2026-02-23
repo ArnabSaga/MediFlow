@@ -1,5 +1,7 @@
 import { addHours, addMinutes, format } from "date-fns";
+import status from "http-status";
 import { Prisma, Schedule } from "../../../generated/prisma/client";
+import AppError from "../../errorHelpers/AppError";
 import { IQueryParams } from "../../interfaces/query.interface";
 import { prisma } from "../../lib/prisma";
 import { QueryBuilder } from "../../utils/QueryBuilder";
@@ -101,18 +103,47 @@ const getScheduleById = async (id: string) => {
 };
 
 const updateSchedule = async (id: string, payload: IUpdateSchedulePayload) => {
-  const { startDate, endDate, startTime, endTime } = payload;
+  const {
+    startDate,
+    endDate,
+    startDateTime: payloadStartDateTime,
+    endDateTime: payloadEndDateTime,
+    startTime,
+    endTime,
+  } = payload;
+
+  const existingSchedule = await prisma.schedule.findUnique({
+    where: {
+      id: id,
+    },
+  });
+
+  if (!existingSchedule) {
+    throw new AppError(status.NOT_FOUND, "Schedule not found");
+  }
+
+  const startDateStr =
+    startDate || payloadStartDateTime || format(existingSchedule.startDateTime, "yyyy-MM-dd");
+  const endDateStr =
+    endDate || payloadEndDateTime || format(existingSchedule.endDateTime, "yyyy-MM-dd");
+
+  const startTimeStr = startTime || format(existingSchedule.startDateTime, "HH:mm");
+  const endTimeStr = endTime || format(existingSchedule.endDateTime, "HH:mm");
+
   const startDateTime = new Date(
     addMinutes(
-      addHours(`${format(new Date(startDate), "yyyy-MM-dd")}`, Number(startTime.split(":")[0])),
-      Number(startTime.split(":")[1])
+      addHours(
+        `${format(new Date(startDateStr), "yyyy-MM-dd")}`,
+        Number(startTimeStr.split(":")[0])
+      ),
+      Number(startTimeStr.split(":")[1])
     )
   );
 
   const endDateTime = new Date(
     addMinutes(
-      addHours(`${format(new Date(endDate), "yyyy-MM-dd")}`, Number(endTime.split(":")[0])),
-      Number(endTime.split(":")[1])
+      addHours(`${format(new Date(endDateStr), "yyyy-MM-dd")}`, Number(endTimeStr.split(":")[0])),
+      Number(endTimeStr.split(":")[1])
     )
   );
 

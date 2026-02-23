@@ -6,8 +6,10 @@ export interface ICreateSchedulePayload {
 }
 
 export interface IUpdateSchedulePayload {
-  startDate: string;
-  endDate: string;
-  startTime: string;
-  endTime: string;
+  startDate?: string;
+  endDate?: string;
+  startDateTime?: string;
+  endDateTime?: string;
+  startTime?: string;
+  endTime?: string;
 }
