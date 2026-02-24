@@ -5,3 +5,11 @@ export interface IUpdateAdminPayload {
     contactNumber?: string;
   };
 }
+
+export interface IUpdateAdminProfilePayload {
+  admin?: {
+    name?: string;
+    profilePhoto?: string;
+    contactNumber?: string;
+  };
+}

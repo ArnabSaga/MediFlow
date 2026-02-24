@@ -3,7 +3,7 @@ import { UserStatus } from "../../../generated/prisma/enums";
 import AppError from "../../errorHelpers/AppError";
 import { IRequestUser } from "../../interfaces/requestUser.interface";
 import { prisma } from "../../lib/prisma";
-import { IUpdateAdminPayload } from "./admin.interface";
+import { IUpdateAdminPayload, IUpdateAdminProfilePayload } from "./admin.interface";
 
 const getAllAdmins = async () => {
   const admins = await prisma.admin.findMany({
@@ -100,9 +100,59 @@ const deleteAdmin = async (id: string, user: IRequestUser) => {
   return result;
 };
 
+const updateMyProfile = async (user: IRequestUser, payload: IUpdateAdminProfilePayload) => {
+  const adminData = await prisma.admin.findUniqueOrThrow({
+    where: {
+      email: user.email,
+    },
+  });
+
+  const { admin } = payload;
+
+  await prisma.$transaction(async (tx) => {
+    if (admin) {
+      await tx.admin.update({
+        where: {
+          id: adminData.id,
+        },
+        data: {
+          ...admin,
+        },
+      });
+
+      if (admin.name || admin.profilePhoto) {
+        const userData = {
+          name: admin.name ? admin.name : adminData.name,
+          image: admin.profilePhoto ? admin.profilePhoto : adminData.profilePhoto,
+        };
+        await tx.user.update({
+          where: {
+            id: adminData.userId,
+          },
+          data: {
+            ...userData,
+          },
+        });
+      }
+    }
+  });
+
+  const result = await prisma.admin.findUnique({
+    where: {
+      id: adminData.id,
+    },
+    include: {
+      user: true,
+    },
+  });
+
+  return result;
+};
+
 export const AdminService = {
   getAllAdmins,
   getAdminById,
   updateAdmin,
   deleteAdmin,
+  updateMyProfile,
 };
