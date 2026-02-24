@@ -12,7 +12,7 @@ const storage = new CloudinaryStorage({
       .split(".")
       .slice(0, -1)
       .join(".")
-      .toLocaleLowerCase()
+      .toLowerCase()
       .replace(/\s+/g, "-")
       // eslint-disable-next-line no-useless-escape
       .replace(/[^a-z0-9\-]/g, "");

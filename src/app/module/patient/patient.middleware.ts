@@ -9,7 +9,6 @@ export const updateMyPatientProfileMiddleware = (
   if (req.body.data) {
     req.body = JSON.parse(req.body.data);
   }
-
   const payload: IUpdatePatientProfilePayload = req.body;
 
   const files = req.files as { [fieldName: string]: Express.Multer.File[] | undefined };
@@ -18,7 +17,7 @@ export const updateMyPatientProfileMiddleware = (
     if (!payload.patientInfo) {
       payload.patientInfo = {} as IUpdatePatientInfoPayload;
     }
-    payload.patientInfo.profilePhoto = files.profilePhoto?.[0].path;
+    payload.patientInfo.profilePhoto = files.profilePhoto[0].path;
   }
 
   if (files?.medicalReports && files?.medicalReports.length > 0) {
@@ -27,7 +26,7 @@ export const updateMyPatientProfileMiddleware = (
       reportLink: file.path,
     }));
 
-    if (!payload.medicalReports && Array.isArray(payload.medicalReports)) {
+    if (payload.medicalReports && Array.isArray(payload.medicalReports)) {
       payload.medicalReports = [...payload.medicalReports, ...newReports];
     } else {
       payload.medicalReports = newReports;

@@ -16,9 +16,10 @@ router.patch(
     { name: "profilePhoto", maxCount: 1 },
     { name: "medicalReports", maxCount: 5 },
   ]),
+
   updateMyPatientProfileMiddleware,
   validateRequest(PatientValidation.updatePatientProfileZodSchema),
   PatientController.updateMyProfile
 );
 
-export const PatientRoute = router;
+export const PatientRoutes = router;
