@@ -20,3 +20,20 @@ export interface IUpdateDoctorPayload {
   };
   specialties?: IUpdateDoctorSpecialtyPayload[];
 }
+
+export interface IUpdateDoctorProfilePayload {
+  doctor?: {
+    name?: string;
+    profilePhoto?: string;
+    contactNumber?: string;
+    address?: string;
+    experience?: number;
+    registrationNumber?: string;
+    gender?: Gender;
+    appointmentFee?: number;
+    qualification?: string;
+    currentWorkingPlace?: string;
+    designation?: string;
+  };
+  specialties?: IUpdateDoctorSpecialtyPayload[];
+}

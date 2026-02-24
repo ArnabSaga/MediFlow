@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import status from "http-status";
 
+import { IRequestUser } from "../../interfaces/requestUser.interface";
 import { catchAsync } from "../../shared/catchAsync";
 import { sendResponse } from "../../shared/sendResponse";
 
@@ -17,7 +18,7 @@ const getAllDoctors = catchAsync(async (req: Request, res: Response) => {
     success: true,
     message: "Doctors retrieved successfully",
     data: result.data,
-    meta: result.meta
+    meta: result.meta,
   });
 });
 
@@ -60,9 +61,24 @@ const deleteDoctor = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+const updateMyProfile = catchAsync(async (req: Request, res: Response) => {
+  const user = req.user as IRequestUser;
+  const payload = req.body;
+
+  const result = await DoctorService.updateMyProfile(user, payload);
+
+  sendResponse(res, {
+    httpStatusCode: status.OK,
+    success: true,
+    message: "Profile updated successfully",
+    data: result,
+  });
+});
+
 export const DoctorController = {
   getAllDoctors,
   getDoctorById,
   updateDoctor,
   deleteDoctor,
+  updateMyProfile,
 };

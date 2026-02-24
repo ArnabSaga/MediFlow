@@ -6,6 +6,7 @@ import AppError from "../../errorHelpers/AppError";
 
 import { Doctor, Prisma } from "../../../generated/prisma/client";
 import { IQueryParams } from "../../interfaces/query.interface";
+import { IRequestUser } from "../../interfaces/requestUser.interface";
 import { prisma } from "../../lib/prisma";
 import { QueryBuilder } from "../../utils/QueryBuilder";
 import {
@@ -13,7 +14,7 @@ import {
   doctorIncludesConfig,
   doctorSearchableFields,
 } from "./doctor.constant";
-import { IUpdateDoctorPayload } from "./doctor.interface";
+import { IUpdateDoctorPayload, IUpdateDoctorProfilePayload } from "./doctor.interface";
 
 const getAllDoctors = async (queryParams: IQueryParams) => {
   // const doctors = await prisma.doctor.findMany({
@@ -43,7 +44,7 @@ const getAllDoctors = async (queryParams: IQueryParams) => {
     .where({
       isDeleted: false,
     })
-    .includes({
+    .include({
       user: true,
       // specialties: true,
       specialties: {
@@ -52,7 +53,7 @@ const getAllDoctors = async (queryParams: IQueryParams) => {
         },
       },
     })
-    .dynamicIncludes(doctorIncludesConfig)
+    .dynamicInclude(doctorIncludesConfig)
     .paginate()
     .sort()
     .fields()
@@ -193,9 +194,107 @@ const deleteDoctor = async (id: string) => {
   return { message: "Doctor deleted successfully" };
 };
 
+const updateMyProfile = async (user: IRequestUser, payload: IUpdateDoctorProfilePayload) => {
+  const doctorData = await prisma.doctor.findUniqueOrThrow({
+    where: {
+      email: user.email,
+    },
+  });
+
+  const { doctor: doctorPayload, specialties } = payload;
+
+  await prisma.$transaction(async (tx) => {
+    if (doctorPayload) {
+      await tx.doctor.update({
+        where: {
+          id: doctorData.id,
+        },
+        data: {
+          ...doctorPayload,
+        },
+      });
+
+      if (doctorPayload.name || doctorPayload.profilePhoto) {
+        const userData = {
+          name: doctorPayload.name ? doctorPayload.name : doctorData.name,
+          image: doctorPayload.profilePhoto ? doctorPayload.profilePhoto : doctorData.profilePhoto,
+        };
+        await tx.user.update({
+          where: {
+            id: doctorData.userId,
+          },
+          data: {
+            ...userData,
+          },
+        });
+      }
+    }
+
+    if (specialties && specialties.length > 0) {
+      for (const specialty of specialties) {
+        const { specialtyId, shouldDelete } = specialty;
+        if (shouldDelete) {
+          await tx.doctorSpecialty.delete({
+            where: {
+              doctorId_specialtyId: {
+                doctorId: doctorData.id,
+                specialtyId,
+              },
+            },
+          });
+        } else {
+          await tx.doctorSpecialty.upsert({
+            where: {
+              doctorId_specialtyId: {
+                doctorId: doctorData.id,
+                specialtyId,
+              },
+            },
+            create: {
+              doctorId: doctorData.id,
+              specialtyId,
+            },
+            update: {},
+          });
+        }
+      }
+    }
+  });
+
+  const result = await prisma.doctor.findUnique({
+    where: {
+      id: doctorData.id,
+    },
+    include: {
+      user: true,
+      specialties: {
+        include: {
+          specialty: true,
+        },
+      },
+      appointments: {
+        include: {
+          patient: true,
+          schedule: true,
+          prescription: true,
+        },
+      },
+      doctorSchedules: {
+        include: {
+          schedule: true,
+        },
+      },
+      reviews: true,
+    },
+  });
+
+  return result;
+};
+
 export const DoctorService = {
   getAllDoctors,
   getDoctorById,
   updateDoctor,
   deleteDoctor,
+  updateMyProfile,
 };
