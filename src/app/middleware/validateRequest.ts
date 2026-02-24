@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
-import * as z from 'zod';
+import * as z from "zod";
 
 export const validateRequest = (zodSchema: z.ZodObject) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    if (req.body.data) {
+    if (req.body.data && typeof req.body.data === "string") {
       req.body = JSON.parse(req.body.data);
     }
 
