@@ -7,12 +7,14 @@ import { UserRoutes } from "../module/user/user.route";
 import { ScheduleRoutes } from '../module/schedule/schedule.route';
 import { DoctorScheduleRoutes } from '../module/doctorSchedule/doctorSchedule.route';
 import { AppointmentRoutes } from '../module/appointment/appointment.route';
+import { PatientRoute } from '../module/patient/patient.route';
 
 const router = Router();
 
 router.use("/auth", AuthRoutes);
 router.use("/specialties", SpecialtyRoutes);
 router.use("/users", UserRoutes);
+router.use("/patients", PatientRoute);
 router.use("/doctors", DoctorRoutes);
 router.use("/admins", AdminRoutes);
 router.use("/schedules", ScheduleRoutes);
