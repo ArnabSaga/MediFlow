@@ -42,6 +42,13 @@ const createDoctor = async (payload: ICreateDoctorPayload) => {
     },
   });
 
+  if (userData.user.role !== Role.DOCTOR) {
+    await prisma.user.update({
+      where: { id: userData.user.id },
+      data: { role: Role.DOCTOR },
+    });
+  }
+
   try {
     const result = await prisma.$transaction(async (tx) => {
       const doctorData = await tx.doctor.create({
@@ -146,6 +153,13 @@ const createAdmin = async (payload: ICreateAdminPayload) => {
       needPasswordChange: true,
     },
   });
+
+  if (userData.user.role !== role) {
+    await prisma.user.update({
+      where: { id: userData.user.id },
+      data: { role },
+    });
+  }
 
   try {
     const adminData = await prisma.admin.create({
