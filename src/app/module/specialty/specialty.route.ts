@@ -14,7 +14,7 @@ router.get("/", SpecialtyController.getAllSpecialties);
 
 router.post(
   "/",
-  // checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
+  checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
   multerUpload.single("file"),
   validateRequest(SpecialtyValidation.createSpecialtyZodSchema),
   SpecialtyController.createSpecialty
@@ -22,7 +22,7 @@ router.post(
 
 router.patch(
   "/:id",
-  // checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
+  checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
   multerUpload.single("file"),
   validateRequest(SpecialtyValidation.updateSpecialtyZodSchema),
   SpecialtyController.updateSpecialty
