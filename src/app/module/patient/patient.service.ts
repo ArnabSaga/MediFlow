@@ -5,6 +5,7 @@ import { IUpdatePatientHealthDataPayload, IUpdatePatientProfilePayload } from ".
 import { convertToDateTime } from "./patient.utils";
 
 const updateMyProfile = async (user: IRequestUser, payload: IUpdatePatientProfilePayload) => {
+  // throw new Error("This is an intentional error to test Sentry integration in the backend.");
   const patientData = await prisma.patient.findUniqueOrThrow({
     where: {
       email: user.email,
