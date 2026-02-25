@@ -34,5 +34,5 @@
     "**/node_modules": true,
     "next-env.d.ts": true
   },
-  "cSpell.words": ["Medi"]
+  "cSpell.words": ["Medi", "MediFlow"]
 }
