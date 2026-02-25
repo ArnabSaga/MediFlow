@@ -4,110 +4,270 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Signing in with Google...</title>
+    <title>Connecting to Google - MediFlow</title>
     <style>
-        body {
-            background-color: #F3F4F6;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        :root {
+            --primary-color: #0ea5e9;
+            --primary-dark: #0284c7;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
+        }
+
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            color: #1F2937;
-        }
-
-        .redirect-card {
-            background: #ffffff;
-            padding: 40px;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-            text-align: center;
-            max-width: 400px;
-            width: 90%;
-            border: 1px solid #E5E7EB;
-        }
-
-        .logo-container {
-            margin-bottom: 24px;
+            min-height: 100vh;
+            color: var(--text-main);
+            overflow: hidden;
             position: relative;
-            display: inline-block;
         }
 
-        .google-icon {
-            width: 48px;
-            height: 48px;
-        }
-
-        .spinner-ring {
+        /* Animated Background Elements */
+        .bg-shape {
             position: absolute;
-            top: -8px;
-            left: -8px;
-            width: 64px;
-            height: 64px;
-            border: 3px solid #E5E7EB;
-            border-top: 3px solid #4285F4;
-            /* Google Blue */
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            filter: blur(80px);
+            z-index: 0;
+            opacity: 0.5;
         }
 
-        h2 {
-            font-size: 20px;
-            font-weight: 700;
-            margin: 0 0 8px 0;
-            color: #111827;
+        .shape-1 {
+            width: 400px;
+            height: 400px;
+            background: rgba(14, 165, 233, 0.3);
+            top: -100px;
+            left: -100px;
+            animation: float 8s ease-in-out infinite alternate;
         }
 
-        p {
-            font-size: 14px;
-            color: #6B7280;
-            margin: 0;
-            line-height: 1.5;
+        .shape-2 {
+            width: 350px;
+            height: 350px;
+            background: rgba(16, 185, 129, 0.2);
+            bottom: -50px;
+            right: -50px;
+            animation: float 10s ease-in-out infinite alternate-reverse;
         }
 
-        @keyframes spin {
+        @keyframes float {
             0% {
-                transform: rotate(0deg);
+                transform: translateY(0) scale(1);
             }
 
             100% {
-                transform: rotate(360deg);
+                transform: translateY(30px) scale(1.1);
             }
+        }
+
+        .auth-card {
+            background: var(--card-bg);
+            padding: 50px 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1), 0 10px 20px -5px rgba(0, 0, 0, 0.04);
+            text-align: center;
+            max-width: 420px;
+            width: 90%;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            z-index: 10;
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Pulse Animation */
+        .logo-wrapper {
+            position: relative;
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pulse-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid var(--primary-color);
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        .pulse-ring:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: scale(1.8);
+                opacity: 0;
+            }
+        }
+
+        .google-icon-container {
+            width: 70px;
+            height: 70px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            z-index: 2;
+            position: relative;
+        }
+
+        .google-icon {
+            width: 36px;
+            height: 36px;
+        }
+
+        h2 {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
+
+        p {
+            font-size: 15px;
+            color: var(--text-muted);
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .loading-dots::after {
+            content: '';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+
+        @keyframes dots {
+
+            0%,
+            20% {
+                content: '';
+            }
+
+            40% {
+                content: '.';
+            }
+
+            60% {
+                content: '..';
+            }
+
+            80%,
+            100% {
+                content: '...';
+            }
+        }
+
+        .error-state {
+            display: none;
+            padding: 20px;
+            background-color: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 12px;
+            margin-top: 20px;
+            color: #b91c1c;
+        }
+
+        .error-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .btn-retry {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 24px;
+            background-color: var(--text-main);
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: background-color 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-retry:hover {
+            background-color: #334155;
         }
     </style>
 </head>
 
 <body>
-    <div class="redirect-card">
-        <div class="logo-container">
-            <div class="spinner-ring"></div>
+    <!-- Background Elements -->
+    <div class="bg-shape shape-1"></div>
+    <div class="bg-shape shape-2"></div>
 
-            <svg class="google-icon" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-                <path fill="#EA4335"
-                    d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z">
-                </path>
-                <path fill="#4285F4"
-                    d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z">
-                </path>
-                <path fill="#FBBC05"
-                    d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z">
-                </path>
-                <path fill="#34A853"
-                    d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z">
-                </path>
-            </svg>
+    <div class="auth-card" id="main-content">
+        <div class="logo-wrapper" id="loading-animation">
+            <div class="pulse-ring"></div>
+            <div class="pulse-ring"></div>
+            <div class="google-icon-container">
+                <svg class="google-icon" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="#EA4335"
+                        d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z">
+                    </path>
+                    <path fill="#4285F4"
+                        d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z">
+                    </path>
+                    <path fill="#FBBC05"
+                        d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z">
+                    </path>
+                    <path fill="#34A853"
+                        d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z">
+                    </path>
+                </svg>
+            </div>
         </div>
 
-        <h2>Connecting to Google</h2>
-        <p>Please wait while we securely redirect you...</p>
-    </div>
-</body>
+        <h2 id="loading-title">Secure Connection</h2>
+        <p id="loading-desc">Connecting you to Google<span class="loading-dots"></span></p>
 
-<script>
-    (
-        async () => {
+        <div class="error-state" id="error-state">
+            <div class="error-icon">⚠️</div>
+            <div style="font-weight: 700; margin-bottom: 5px; color: #991b1b;">Connection Failed</div>
+            <p id="error-message" style="color: #b91c1c; font-size: 13px; margin-bottom: 15px;">An unknown error
+                occurred.</p>
+            <button class="btn-retry" onclick="window.location.reload()">Try Again</button>
+        </div>
+    </div>
+
+    <script>
+        (async () => {
+            const errorState = document.getElementById('error-state');
+            const errorMessage = document.getElementById('error-message');
+
+            const showError = (msg) => {
+                document.getElementById('loading-title').style.display = 'none';
+                document.getElementById('loading-desc').style.display = 'none';
+                document.getElementById('loading-animation').style.display = 'none';
+                errorState.style.display = 'block';
+                errorMessage.textContent = msg;
+            };
+
             try {
                 const response = await fetch("<%= betterAuthUrl %>/api/auth/sign-in/social", {
                     method: "POST",
@@ -125,17 +285,13 @@
                 if (data.url) {
                     window.location.href = data.url;
                 } else {
-                    document.body.innerHTML = `<div>
-                    <p>Error occurred while redirecting to Google. Please try again later ${data.message}</p>
-                    </div>`;
+                    showError(data.message || "Failed to retrieve redirect URL.");
                 }
             } catch (error) {
-                document.body.innerHTML = `<div>
-                    <p>Error occurred while redirecting to Google. Please try again later ${error.message}</p>
-                    </div>`;
+                showError(error.message || "Network error. Please try again.");
             }
-        }
-    )()
-</script>
+        })();
+    </script>
+</body>
 
 </html>

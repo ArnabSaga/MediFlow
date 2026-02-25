@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Payment Invoice - MediFlow</title>
+    <style>
+        :root {
+            --primary-color: #0ea5e9;
+            --primary-dark: #0284c7;
+            --secondary-color: #f0f9ff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --success-color: #10b981;
+            --success-bg: #d1fae5;
+            --bg-color: #f8fafc;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 40px auto;
+            background-color: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+            border: 1px solid var(--border-color);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: linear-gradient(to bottom right, transparent 49%, white 50%);
+        }
+
+        .header h1 {
+            font-size: 36px;
+            margin-bottom: 8px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .header p {
+            font-size: 15px;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+
+        .content {
+            padding: 20px 40px 40px;
+        }
+
+        .greeting {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-main);
+        }
+
+        .intro-text {
+            color: var(--text-muted);
+            font-size: 15px;
+            margin-bottom: 30px;
+        }
+
+        .invoice-card {
+            background-color: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .invoice-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background-color: var(--primary-color);
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .info-group {
+            margin-bottom: 15px;
+        }
+
+        .info-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .info-value {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .status-badge {
+            display: inline-block;
+            background-color: var(--success-bg);
+            color: var(--success-color);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+
+        .details-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background-color: var(--border-color);
+            margin-left: 15px;
+        }
+
+        .table-container {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .table-container th {
+            background-color: var(--secondary-color);
+            color: var(--text-muted);
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .table-container td {
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .table-container tr:last-child td {
+            border-bottom: none;
+        }
+
+        .amount-summary {
+            background-color: var(--secondary-color);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 15px;
+            color: var(--text-muted);
+        }
+
+        .summary-row.total {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px dashed var(--border-color);
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .action-container {
+            text-align: center;
+            margin: 40px 0 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 14px 32px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px -1px rgba(14, 165, 233, 0.2), 0 2px 4px -1px rgba(14, 165, 233, 0.1);
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 8px -1px rgba(14, 165, 233, 0.3), 0 4px 6px -1px rgba(14, 165, 233, 0.2);
+        }
+
+        .footer {
+            background-color: var(--bg-color);
+            padding: 30px 40px;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer-logo {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--primary-dark);
+            margin-bottom: 5px;
+        }
+
+        .footer-tagline {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        .footer-links a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            margin: 0 10px;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-note {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        @media (max-width: 600px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .content,
+            .header,
+            .footer {
+                padding: 25px 20px;
+            }
+
+            .header h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Payment Receipt</h1>
+            <p>Thank you for choosing MediFlow</p>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <div class="greeting">
+                Hello <%= patientName %>,
+            </div>
+
+            <p class="intro-text">
+                Your payment for the upcoming consultation appointment has been <strong>successfully processed</strong>.
+                Below are your official invoice details.
+            </p>
+
+            <!-- Invoice Details Card -->
+            <div class="invoice-card">
+                <div class="grid-2">
+                    <div>
+                        <div class="info-group">
+                            <div class="info-label">Invoice ID</div>
+                            <div class="info-value">#<%= invoiceId %>
+                            </div>
+                        </div>
+                        <div class="info-group">
+                            <div class="info-label">Payment Date</div>
+                            <div class="info-value">
+                                <%= paymentDate %>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="info-group">
+                            <div class="info-label">Transaction ID</div>
+                            <div class="info-value" style="font-family: monospace; font-size: 14px;">
+                                <%= transactionId %>
+                            </div>
+                        </div>
+                        <div class="info-group">
+                            <div class="info-label">Status</div>
+                            <div class="status-badge">✓ PAID IN FULL</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Consultation Details -->
+            <div class="details-section">
+                <div class="section-title">Consultation Details</div>
+                <table class="table-container">
+                    <thead>
+                        <tr>
+                            <th>Description</th>
+                            <th style="text-align: right;">Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div style="font-weight: 600; color: var(--text-main);">Medical Consultation</div>
+                                <div style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">Dr. <%=
+                                        doctorName %>
+                                </div>
+                            </td>
+                            <td style="text-align: right; color: var(--text-main);">
+                                <%= appointmentDate %>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Amount Summary -->
+            <div class="amount-summary">
+                <div class="summary-row">
+                    <span>Consultation Fee</span>
+                    <span>
+                        <%= amount.toFixed(2) %> BDT
+                    </span>
+                </div>
+                <div class="summary-row">
+                    <span>Tax & Platform Fee</span>
+                    <span>0.00 BDT</span>
+                </div>
+                <div class="summary-row total">
+                    <span>Total Amount Paid</span>
+                    <span style="color: var(--primary-dark);">
+                        <%= amount.toFixed(2) %> BDT
+                    </span>
+                </div>
+            </div>
+
+            <!-- Action Section -->
+            <div class="action-container">
+                <% if (typeof invoiceUrl !=='undefined' && invoiceUrl) { %>
+                    <a href="<%= invoiceUrl %>" class="btn">Download PDF Invoice</a>
+                    <% } %>
+                        <p style="margin-top: 15px; font-size: 13px; color: var(--text-muted);">
+                            A copy of this invoice has been securely attached to this email.
+                        </p>
+            </div>
+
+            <div style="background-color: var(--secondary-color); padding: 15px; border-radius: 8px; margin-top: 30px;">
+                <p style="font-size: 13px; color: var(--text-main); margin-bottom: 5px; font-weight: 600;">
+                    📅 Next Steps
+                </p>
+                <p style="font-size: 13px; color: var(--text-muted);">
+                    Your appointment is confirmed. Please log into your MediFlow dashboard 10 minutes before the
+                    scheduled time to join the consultation.
+                </p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div class="footer-logo">MediFlow</div>
+            <div class="footer-tagline">Your Health, Our Priority</div>
+            <div class="footer-links">
+                <a href="https://mediflow.com/dashboard">My Dashboard</a>
+                <a href="https://mediflow.com/support">Contact Support</a>
+            </div>
+            <div class="footer-note">
+                &copy; 2026 MediFlow Inc. All rights reserved.<br>
+                This is an automated communication. Please do not reply directly to this email.
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

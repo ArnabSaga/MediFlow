@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Medical Prescription - MediFlow</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary-color: #eff6ff;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --border-color: #cbd5e1;
+            --alert-color: #ef4444;
+            --alert-bg: #fef2f2;
+            --bg-color: #f1f5f9;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 750px;
+            margin: 40px auto;
+            background-color: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color);
+        }
+
+        .header {
+            background-color: white;
+            padding: 30px 40px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-brand h1 {
+            color: var(--primary-dark);
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 4px;
+        }
+
+        .header-brand p {
+            color: var(--text-muted);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .header-rx {
+            font-size: 48px;
+            font-weight: 900;
+            color: var(--secondary-color);
+            text-shadow: 2px 2px 0 var(--primary-color);
+            font-family: serif;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .greeting {
+            font-size: 18px;
+            color: var(--text-main);
+            margin-bottom: 25px;
+        }
+
+        .greeting strong {
+            color: var(--primary-dark);
+            font-size: 20px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .info-card {
+            background-color: #fafafa;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .info-card-title {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .info-card-title svg {
+            width: 18px;
+            height: 18px;
+            margin-right: 8px;
+        }
+
+        .info-row {
+            display: flex;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .info-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-row .label {
+            width: 120px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .info-row .value {
+            flex: 1;
+            color: var(--text-main);
+            font-weight: 500;
+        }
+
+        .instructions-box {
+            background-color: var(--secondary-color);
+            border-left: 4px solid var(--primary-color);
+            border-radius: 4px 8px 8px 4px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .instructions-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .instructions-content {
+            font-size: 15px;
+            color: var(--text-main);
+            line-height: 1.8;
+            white-space: pre-wrap;
+            background: white;
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .pdf-download {
+            text-align: center;
+            padding: 30px;
+            background-color: white;
+            border: 2px dashed var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .pdf-download-text {
+            color: var(--text-main);
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .pdf-download-sub {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .btn-download {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-download:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .warning-box {
+            background-color: var(--alert-bg);
+            border: 1px solid #fecaca;
+            color: #b91c1c;
+            padding: 15px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .warning-box strong {
+            margin-right: 5px;
+        }
+
+        .footer {
+            background-color: var(--text-main);
+            color: white;
+            padding: 30px 40px;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .footer-text {
+            color: #94a3b8;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
+        .footer-link {
+            color: #38bdf8;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .footer-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 650px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            .header,
+            .content,
+            .footer {
+                padding: 25px;
+            }
+
+            .header-rx {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-brand">
+                <h1>MediFlow</h1>
+                <p>Digital Prescription Services</p>
+            </div>
+            <div class="header-rx">Rx</div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <div class="greeting">
+                Dear <strong>
+                    <%= patientName %>
+                </strong>,
+                <p style="font-size: 15px; color: var(--text-muted); margin-top: 5px;">Your digital prescription has
+                    been issued by your consulting doctor.</p>
+            </div>
+
+            <!-- Info Grids -->
+            <div class="grid-2">
+                <!-- Doctor Info -->
+                <div class="info-card">
+                    <div class="info-card-title">👨‍⚕️ Provider Information</div>
+                    <div class="info-row">
+                        <div class="label">Doctor Name</div>
+                        <div class="value">
+                            <%= doctorName %>
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <div class="label">Specialty</div>
+                        <div class="value">
+                            <%= specialization %>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Prescription Info -->
+                <div class="info-card">
+                    <div class="info-card-title">📋 Prescription Details</div>
+                    <div class="info-row">
+                        <div class="label">Prescription ID</div>
+                        <div class="value" style="font-family: monospace;">
+                            <%= prescriptionId %>
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <div class="label">Consultation Date</div>
+                        <div class="value">
+                            <%= appointmentDate %>
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <div class="label">Issued On</div>
+                        <div class="value">
+                            <%= issuedDate %>
+                        </div>
+                    </div>
+                    <% if (typeof followUpDate !=='undefined' && followUpDate) { %>
+                        <div class="info-row"
+                            style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border-color);">
+                            <div class="label" style="color: var(--primary-dark);">Follow-up Due</div>
+                            <div class="value" style="font-weight: 700; color: var(--primary-dark);">
+                                <%= followUpDate %>
+                            </div>
+                        </div>
+                        <% } %>
+                </div>
+            </div>
+
+            <!-- Instructions Section -->
+            <div class="instructions-box">
+                <div class="instructions-title">💊 Medications & Doctor's Instructions</div>
+                <div class="instructions-content">
+                    <%= instructions %>
+                </div>
+            </div>
+
+            <!-- PDF Download Section -->
+            <div class="pdf-download">
+                <div class="pdf-download-text">Official Digitally Signed Prescription</div>
+                <div class="pdf-download-sub">A formal PDF copy is attached. Download it to share with pharmacies or for
+                    your personal health records.</div>
+                <% if (typeof pdfUrl !=='undefined' && pdfUrl) { %>
+                    <a href="<%= pdfUrl %>" class="btn-download">Download PDF Document</a>
+                    <% } %>
+            </div>
+
+            <!-- Warning Note -->
+            <div class="warning-box">
+                <strong>⚠️ Note:</strong>
+                <div>Please follow all medication instructions and dosages strictly as prescribed. Do not alter dosages
+                    without consulting your doctor. If you experience adverse reactions, contact emergency services
+                    immediately.</div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div class="footer-logo">MediFlow Health Systems</div>
+            <div class="footer-text">
+                This document is securely generated and intended only for the patient.<br>
+                For verification or inquiries, visit <a href="https://mediflow.com"
+                    class="footer-link">mediflow.com</a>.
+            </div>
+            <div style="font-size: 11px; color: #64748b; margin-top: 20px;">
+                © 2026 MediFlow Inc. All rights reserved. Do not reply to this automated email.
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
