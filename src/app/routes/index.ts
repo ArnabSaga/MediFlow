@@ -5,10 +5,12 @@ import { AuthRoutes } from "../module/auth/auth.route";
 import { DoctorRoutes } from "../module/doctor/doctor.route";
 import { DoctorScheduleRoutes } from "../module/doctorSchedule/doctorSchedule.route";
 import { PatientRoutes } from "../module/patient/patient.route";
+import { PaymentRoutes } from "../module/payment/payment.route";
 import { PrescriptionRoutes } from "../module/prescription/prescription.route";
 import { ReviewRoutes } from "../module/review/review.route";
 import { ScheduleRoutes } from "../module/schedule/schedule.route";
 import { SpecialtyRoutes } from "../module/specialty/specialty.route";
+import { StatsRoutes } from "../module/stats/stats.route";
 import { UserRoutes } from "../module/user/user.route";
 
 const router = Router();
@@ -23,6 +25,8 @@ router.use("/schedules", ScheduleRoutes);
 router.use("/doctor-schedules", DoctorScheduleRoutes);
 router.use("/appointments", AppointmentRoutes);
 router.use("/prescriptions", PrescriptionRoutes);
+router.use("/stats", StatsRoutes);
 router.use("/reviews", ReviewRoutes);
+router.use("/payment", PaymentRoutes);
 
 export const IndexRoutes = router;
